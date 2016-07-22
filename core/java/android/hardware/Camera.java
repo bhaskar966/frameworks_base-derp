@@ -273,6 +273,7 @@ public class Camera {
          * if the package name does not falls in this bucket
          */
         String packageName = ActivityThread.currentOpPackageName();
+<<<<<<< HEAD
     	if (packageName == null)
     	    return true;
         List<String> packageList = new ArrayList<>(Arrays.asList(
@@ -289,6 +290,14 @@ public class Camera {
 
         return (packageList.isEmpty() || packageList.contains(packageName)) &&
                 !packageExcludelist.contains(packageName);
+=======
+        List<String> packageList = Arrays.asList(
+                SystemProperties.get("vendor.camera.aux.packagelist", packageName).split(","));
+        List<String> packageExcludelist = Arrays.asList(
+                SystemProperties.get("vendor.camera.aux.packageexcludelist", "").split(","));
+
+        return packageList.contains(packageName) && !packageExcludelist.contains(packageName);
+>>>>>>> eae0d79d2465... camera: Support exposing aux camera to apps
     }
 
     /**
@@ -330,6 +339,9 @@ public class Camera {
      *    low-level failure).
      */
     public static void getCameraInfo(int cameraId, CameraInfo cameraInfo) {
+        if (cameraId >= getNumberOfCameras()) {
+            throw new RuntimeException("Unknown camera ID");
+        }
         boolean overrideToPortrait = CameraManager.shouldOverrideToPortrait(
                 ActivityThread.currentApplication().getApplicationContext());
 
