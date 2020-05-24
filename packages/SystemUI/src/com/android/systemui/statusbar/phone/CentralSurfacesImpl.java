@@ -147,6 +147,7 @@ import com.android.systemui.InitController;
 import com.android.systemui.Prefs;
 import com.android.systemui.R;
 import com.android.systemui.accessibility.floatingmenu.AccessibilityFloatingMenuController;
+import com.android.systemui.ambientmusic.AmbientIndicationContainer;
 import com.android.systemui.animation.ActivityLaunchAnimator;
 import com.android.systemui.assist.AssistManager;
 import com.android.systemui.biometrics.AuthRippleController;
@@ -1418,6 +1419,9 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
 
         mAmbientIndicationContainer = mNotificationShadeWindowView.findViewById(
                 R.id.ambient_indication_container);
+        if (mAmbientIndicationContainer != null) {
+            ((AmbientIndicationContainer) mAmbientIndicationContainer).initializeView(this);
+        }
 
         mAutoHideController.setStatusBar(new AutoHideUiElement() {
             @Override
@@ -3109,6 +3113,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
         mShadeSurface.setDozing(mDozing, animate);
         mPulseController.setDozing(mDozing);
         updateQsExpansionEnabled();
+        if (mAmbientIndicationContainer != null) {
+            ((AmbientIndicationContainer)mAmbientIndicationContainer)
+                    .updateDozingState(mDozing);
+        }
         Trace.endSection();
     }
 
@@ -4305,6 +4313,10 @@ public class CentralSurfacesImpl implements CoreStartable, CentralSurfaces, Tune
                     updateScrimController();
                     mPresenter.updateMediaMetaData(false, mState != StatusBarState.KEYGUARD);
                     mPulseController.setKeyguardShowing(mState == StatusBarState.KEYGUARD);
+                    if (mAmbientIndicationContainer != null) {
+                        ((AmbientIndicationContainer)mAmbientIndicationContainer)
+                                .updateKeyguardState(mState == StatusBarState.KEYGUARD);
+                    }
                     Trace.endSection();
                 }
 
