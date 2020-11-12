@@ -6,4 +6,7 @@
 <resources>
 
     <color name="footer_actions_bg">@android:color/system_neutral1_900</color>
+
+    <!-- reTicker -->
+    <color name="reticker_background_color">@android:color/system_neutral1_800</color>
 </resources>
